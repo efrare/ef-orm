@@ -1,0 +1,21 @@
+[package]
+name = "ef-orm-cli"
+description = "Command-line tool for ef-ORM (scaffold, migrate, generate)"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+categories.workspace = true
+keywords.workspace = true
+
+[dependencies]
+ef-orm = { workspace = true }
+ef-orm-migrate = { workspace = true }
+# O binário precisa de um driver concreto para abrir a conexão (a CLI é folha
+# do grafo: driver-tds não é usado por nenhuma biblioteca de cima).
+ef-orm-driver-tds = { workspace = true }
+tokio = { workspace = true }
+clap = { workspace = true }
+
+[lints]
+workspace = true

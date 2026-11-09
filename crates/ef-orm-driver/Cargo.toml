@@ -1,0 +1,30 @@
+[package]
+name = "ef-orm-driver"
+description = "Driver, connection, transaction and row traits plus pool for ef-ORM"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+categories.workspace = true
+keywords.workspace = true
+
+[features]
+# Encaminham as features de mapeamento do core + a dependência de tipo local
+# (os `impl FromValue for Uuid/NaiveDateTime/Decimal` precisam do nome do tipo).
+with-uuid = ["dep:uuid", "ef-orm-core/with-uuid"]
+with-chrono = ["dep:chrono", "ef-orm-core/with-chrono"]
+with-rust_decimal = ["dep:rust_decimal", "ef-orm-core/with-rust_decimal"]
+
+[dependencies]
+ef-orm-core = { workspace = true }
+futures-core = { workspace = true }
+futures-util = { workspace = true }
+thiserror = { workspace = true } # DriverError (fase 1)
+# tokio só para o pool interno (semáforo/timeout); nunca aparece na API pública.
+tokio = { workspace = true }
+uuid = { workspace = true, optional = true } # FromValue de UNIQUEIDENTIFIER
+chrono = { workspace = true, optional = true } # FromValue de datetime/datetime2
+rust_decimal = { workspace = true, optional = true } # FromValue de DECIMAL/NUMERIC
+
+[lints]
+workspace = true

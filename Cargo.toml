@@ -1,0 +1,65 @@
+# Workspace do ef-ORM — ver .opencode/skills/ef-orm/references/architecture.md
+[workspace]
+resolver = "2"
+members = [
+    "crates/ef-orm-core",
+    "crates/ef-orm-query",
+    "crates/ef-orm-driver",
+    "crates/ef-orm-driver-tds",
+    "crates/ef-orm",
+    "crates/ef-orm-derive",
+    "crates/ef-orm-migrate",
+    "crates/ef-orm-cli",
+    "examples",
+]
+
+[workspace.package]
+version = "0.0.1"
+edition = "2024"
+rust-version = "1.85"
+license = "MIT OR Apache-2.0"
+categories = ["database", "asynchronous"]
+keywords = ["orm", "sqlserver", "mssql", "tds", "database"]
+
+[workspace.dependencies]
+# --- crates internas (seta → = depende de; regra em references/architecture.md) ---
+ef-orm-core = { path = "crates/ef-orm-core" }
+ef-orm-query = { path = "crates/ef-orm-query" }
+ef-orm-driver = { path = "crates/ef-orm-driver" }
+ef-orm-driver-tds = { path = "crates/ef-orm-driver-tds" }
+ef-orm = { path = "crates/ef-orm" }
+ef-orm-derive = { path = "crates/ef-orm-derive" }
+ef-orm-migrate = { path = "crates/ef-orm-migrate" }
+
+# --- dependências externas entram aqui por fase, com justificativa (conventions.md) ---
+# fase 1 (spike TDS):
+thiserror = "2" # erros estruturados: OrmError (core) e DriverError (driver)
+tiberius = "0.13" # driver TDS — só driver-tds importa (regra em architecture.md)
+tokio = { version = "1", features = [
+    "macros",
+    "net",
+    "rt-multi-thread",
+    "sync",
+    "time",
+] } # runtime dos exemplos + pool (sync) + TcpStream/timeout (driver)
+tokio-util = { version = "0.7", features = ["compat"] } # ponte tokio↔futures p/ Client::connect
+# fase 3 (derive):
+proc-macro2 = "1" # span/literal compartilhados pelos proc-macros
+quote = "1" # geração de tokens dos derives Entity/Model
+syn = "2" # parsing de structs/atributos nos proc-macros
+# fase 3 (mapeamento de tipos — cada um atrás de uma feature with-*):
+uuid = { version = "1", features = ["v4"] } # UNIQUEIDENTIFIER; mesma versão usada pelo tiberius (bind/leitura); v4 p/ UUIDs aleatórios nos exemplos/testes
+chrono = "0.4" # datetime/datetime2/datetimeoffset — impls ToSql/FromSql no tiberius (feature `chrono`)
+rust_decimal = "1" # DECIMAL/NUMERIC — impls ToSql/FromSql no tiberius (feature `rust_decimal`)
+# fase 5 (cli): clap
+clap = { version = "4", features = ["derive", "env"] } # subcomandos migrate/scaffold com flags e env
+# fase 6 (streaming/bulk):
+futures-core = "0.3" # trait `Stream` no contrato do driver (streaming de linhas)
+futures-util = "0.3" # combinators (map/StreamExt/empty) no driver TDS e na facade
+async-stream = "0.3" # gerador async → Stream (o QueryStream do Tiberius empresta o cliente)
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+
+[workspace.lints.clippy]
+all = { level = "warn", priority = -1 }

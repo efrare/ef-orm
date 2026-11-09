@@ -1,0 +1,37 @@
+[package]
+name = "ef-orm"
+description = "Async MSSQL-first ORM for Rust: DbContext, change tracking and unit of work"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+categories.workspace = true
+keywords.workspace = true
+
+[features]
+# Encaminham o mapeamento de tipos pelo stack que a facade usa. Quem roda
+# contra o SQL Server real habilita as mesmas features em ef-orm-driver-tds
+# (o tiberius precisa das features `chrono`/`rust_decimal` para ler/escrever
+# esses tipos — os exemplos mostram o pareamento).
+with-uuid = ["ef-orm-core/with-uuid", "ef-orm-driver/with-uuid"]
+with-chrono = ["ef-orm-core/with-chrono", "ef-orm-driver/with-chrono"]
+with-rust_decimal = ["ef-orm-core/with-rust_decimal", "ef-orm-driver/with-rust_decimal"]
+
+[dependencies]
+ef-orm-core = { workspace = true }
+ef-orm-query = { workspace = true }
+ef-orm-driver = { workspace = true }
+ef-orm-derive = { workspace = true } # #[derive(Entity)] / #[derive(Model)] (fase 3)
+futures-util = { workspace = true } # combinators do streaming de linhas (fase 6)
+
+[dev-dependencies]
+# Só nos testes: constroem os valores das features with-* (uuid/chrono/
+# decimal) para validar o contrato dos derives sem depender de servidor.
+uuid = { workspace = true }
+chrono = { workspace = true }
+rust_decimal = { workspace = true }
+# Runtime dos testes async de `save_changes` (transaction/rollback paths).
+tokio = { workspace = true }
+
+[lints]
+workspace = true

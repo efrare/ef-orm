@@ -1,0 +1,15 @@
+[package]
+name = "ef-orm-query"
+description = "Query AST and T-SQL dialect for ef-ORM (the only SQL generator)"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+categories.workspace = true
+keywords.workspace = true
+
+[dependencies]
+ef-orm-core = { workspace = true }
+
+[lints]
+workspace = true

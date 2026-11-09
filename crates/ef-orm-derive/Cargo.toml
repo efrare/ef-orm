@@ -1,0 +1,20 @@
+[package]
+name = "ef-orm-derive"
+description = "Proc-macros for ef-ORM (#[derive(Entity)], #[derive(Model)])"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+categories.workspace = true
+keywords.workspace = true
+
+[lib]
+proc-macro = true
+
+[dependencies]
+proc-macro2 = { workspace = true } # spans/literais na geração de tokens
+quote = { workspace = true } # emição dos impls gerados
+syn = { workspace = true } # parsing de DeriveInput e atributos #[orm(...)]
+
+[lints]
+workspace = true

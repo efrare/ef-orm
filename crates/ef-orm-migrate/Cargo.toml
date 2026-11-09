@@ -1,0 +1,17 @@
+[package]
+name = "ef-orm-migrate"
+description = "Migration engine and history table for ef-ORM"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+categories.workspace = true
+keywords.workspace = true
+
+[dependencies]
+ef-orm = { workspace = true }
+ef-orm-query = { workspace = true }
+# ef-orm-driver-tds entra aqui se o engine precisar de acesso direto (fase 5)
+
+[lints]
+workspace = true

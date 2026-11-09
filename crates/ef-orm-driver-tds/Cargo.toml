@@ -1,0 +1,31 @@
+[package]
+name = "ef-orm-driver-tds"
+description = "Tiberius (TDS) adapter implementing the ef-ORM driver traits"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+categories.workspace = true
+keywords.workspace = true
+
+[features]
+# with-uuid não precisa de dep local (o Tiberius sempre expõe Uuid) nem de
+# feature do tiberius: bind/leitura de UNIQUEIDENTIFIER são incondicionais.
+with-uuid = ["ef-orm-core/with-uuid", "ef-orm-driver/with-uuid"]
+with-chrono = ["dep:chrono", "ef-orm-core/with-chrono", "ef-orm-driver/with-chrono", "tiberius/chrono"]
+with-rust_decimal = ["dep:rust_decimal", "ef-orm-core/with-rust_decimal", "ef-orm-driver/with-rust_decimal", "tiberius/rust_decimal"]
+
+[dependencies]
+ef-orm-core = { workspace = true }
+ef-orm-driver = { workspace = true }
+# Único crate do workspace com tiberius (regra em references/architecture.md).
+tiberius = { workspace = true }
+tokio = { workspace = true } # TcpStream p/ Client::connect
+tokio-util = { workspace = true } # compat_write(): tokio AsyncWrite → futures AsyncWrite
+futures-util = { workspace = true } # StreamExt::next sobre o QueryStream do Tiberius
+async-stream = { workspace = true } # try_stream! → Stream que possui SQL/params
+chrono = { workspace = true, optional = true } # Value::DateTime ⇄ DateTime2 (feature `chrono` do tiberius)
+rust_decimal = { workspace = true, optional = true } # Value::Decimal ⇄ NUMERIC (feature `rust_decimal`)
+
+[lints]
+workspace = true

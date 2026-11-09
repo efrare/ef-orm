@@ -1,0 +1,55 @@
+[package]
+name = "ef-orm-examples"
+description = "Executable examples of ef-ORM (hello-raw, hello-crud, …)"
+publish = false
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+categories.workspace = true
+keywords.workspace = true
+
+[dependencies]
+ef-orm = { workspace = true, features = [
+    "with-uuid",
+    "with-chrono",
+    "with-rust_decimal",
+] } # hello-crud mapeia colunas uuid/chrono/decimal
+ef-orm-driver = { workspace = true }
+ef-orm-driver-tds = { workspace = true, features = [
+    "with-uuid",
+    "with-chrono",
+    "with-rust_decimal",
+] } # tiberius precisa das features `chrono`/`rust_decimal` p/ ler e bindar
+ef-orm-migrate = { workspace = true } # migrate/diff/scaffold example
+ef-orm-query = { workspace = true } # DDL AST used by the migrations example
+futures-util = { workspace = true } # StreamExt no example de streaming (fase 6)
+tokio = { workspace = true }
+uuid = { workspace = true } # colunas UNIQUEIDENTIFIER do hello-crud
+chrono = { workspace = true } # colunas DATETIME2 do hello-crud
+rust_decimal = { workspace = true } # colunas DECIMAL do hello-crud
+
+# Os exemplos vivem na raiz (examples/hello-raw.rs) por contrato com
+# references/roadmap.md; este pacote só os expõe ao cargo.
+[[example]]
+name = "hello-raw"
+path = "hello-raw.rs"
+
+[[example]]
+name = "hello-crud"
+path = "hello-crud.rs"
+
+[[example]]
+name = "change-tracking"
+path = "change-tracking.rs"
+
+[[example]]
+name = "migrations"
+path = "migrations.rs"
+
+[[example]]
+name = "advanced"
+path = "advanced.rs"
+
+[lints]
+workspace = true

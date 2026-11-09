@@ -1,0 +1,25 @@
+[package]
+name = "ef-orm-core"
+description = "Pure domain of ef-ORM: values, entity metadata traits and errors"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+categories.workspace = true
+keywords.workspace = true
+
+[features]
+# Mapeamento de tipos além dos escalares da fase 1. Cada feature isola a
+# respectiva dependência opcional (o crate continua sem deps sem justificativa).
+with-uuid = ["dep:uuid"]
+with-chrono = ["dep:chrono"]
+with-rust_decimal = ["dep:rust_decimal"]
+
+[dependencies]
+thiserror = { workspace = true } # OrmError (fase 1)
+uuid = { workspace = true, optional = true } # Value::Uuid — UNIQUEIDENTIFIER
+chrono = { workspace = true, optional = true } # Value::DateTime — datetime/datetime2
+rust_decimal = { workspace = true, optional = true } # Value::Decimal — DECIMAL/NUMERIC
+
+[lints]
+workspace = true
